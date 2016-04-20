@@ -2,6 +2,7 @@
 
 namespace Benmag\Rancher;
 
+use Benmag\Rancher\Factories\Api\Certificate;
 use Benmag\Rancher\Factories\Api\Container;
 use Benmag\Rancher\Factories\Api\Environment;
 use Benmag\Rancher\Factories\Api\Host;
@@ -30,6 +31,14 @@ class Rancher {
     public function host()
     {
         return new Host($this->client);
+    }
+
+    /**
+     * @return Factories\Api\Certificate
+     */
+    public function certificate()
+    {
+        return new Certificate($this->client);
     }
 
     /**
