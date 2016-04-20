@@ -25,11 +25,11 @@ class Certificate extends AbstractEntity
     protected $state; 
 
     /**
-     * Common name
+     * Domain Names
      *
-     * @var string
+     * @var array
      */
-    protected $CN;
+    protected $subjectAlternativeNames;
 
     /**
      * Certificate
