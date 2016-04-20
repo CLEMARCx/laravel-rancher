@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "benmag\\laravel-rancher\\": "src"
+            "Benmag\\Rancher\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "benmag\\laravel-rancher\\": "tests"
+            "Benmag\\Rancher\\": "tests"
         }
     },
     "scripts": {
