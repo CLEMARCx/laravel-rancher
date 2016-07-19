@@ -3,8 +3,6 @@
 namespace Benmag\Rancher\Factories\Api;
 
 use Benmag\Rancher\Factories\Client;
-use Benmag\Rancher\Factories\Entity\Host as HostEntity;
-use Benmag\Rancher\Factories\Entity\Container;
 
 /**
  * Rancher API wrapper for Laravel
@@ -37,6 +35,34 @@ abstract class AbstractApi
     protected $endpoint;
 
     /**
+     * Optional scope to apply
+     *
+     * @var string
+     */
+    protected $scope;
+
+    /**
+     * Additional fields for entity to make available
+     *
+     * @var array
+     */
+    protected $fields = [];
+
+    /**
+     * Additional endpoints to load with this request
+     *
+     * @var array
+     */
+    protected $with = [];
+
+    /**
+     * Filters to apply to this request
+     *
+     * @var array
+     */
+    protected $filter = [];
+
+    /**
      * Inject API Client
      *
      * @param Client $client
@@ -54,14 +80,14 @@ abstract class AbstractApi
     public function all()
     {
         // Get all objects from Rancher API
-        $objects = $this->client->get($this->endpoint);
+        $objects = $this->client->get($this->getEndpoint(), $this->prepareParams());
 
         // Decode the json response
         $objects = json_decode($objects);
 
         // Convert to entityClass
         return array_map(function ($object) {
-            return new $this->class($object);
+            return $this->instantiateEntity($object);
         }, $objects->data);
 
     }
@@ -69,65 +95,170 @@ abstract class AbstractApi
     /**
      * Get a specified Entity from the API resource.
      *
-     * @param $id
+     * @param null $id
      * @return mixed
      */
-    public function get($id)
+    public function get($id = null)
     {
+
+        // Prep the endpoint
+        $endpoint = ($id) ? $this->getEndpoint() . "/" . $id : $this->getEndpoint();
 
         // Get the resource
-        $object = $this->client->get($this->endpoint . "/" .$id);
+        $response = $this->client->get($endpoint, $this->prepareParams());
 
-        // Parse json response
-        $object = json_decode($object);
-
-        // Instantiate new entityClass
-        return new $this->class($object);
+        // Handle response
+        return $this->handleResponse(json_decode($response));
 
     }
 
     /**
-     * Apply a filter and retrieve results
+     * Define additional fields for entity to dynamically expose.
      *
-     * @param $params
+     * Use this to enable access properties that are
+     * not explicitly defined by the entity
+     *
+     * @var array
+     * @return $this
+     */
+    public function fields($fields)
+    {
+        $this->fields = array_merge($this->fields, $fields);
+        return $this;
+    }
+
+    /**
+     * Define the endpoints to load
+     *
+     * @var array
+     * @return $this
+     */
+    public function with($relations)
+    {
+        $this->with = $relations;
+        $this->fields = array_merge($this->fields, $this->with);
+        return $this;
+    }
+
+    /**
+     * Apply a filter to apply on request
+     *
+     * @param $filter
      * @return mixed
      */
-    public function filter($params)
+    public function filter($filter)
+    {
+        $this->filter = $filter;
+        return $this;
+    }
+
+    /**
+     * Prepare the params for the request
+     *
+     * @return array
+     */
+    public function prepareParams()
+    {
+        return array_merge(
+            ['include' => implode(",", $this->with)],
+            $this->filter
+        );
+    }
+
+    /**
+     * Handle API response.
+     *
+     * When a filter has been applied, we must handle
+     * the response differently.
+     *
+     * @param $response
+     * @return array
+     */
+    public function handleResponse($response) {
+
+        // No filter has been applied to this request.
+        // Standard request, instantiate a single object.
+        if(empty($this->filter)) {
+            return $this->instantiateEntity($response);
+        }
+
+        // Filter applied.
+        // Instantiate an object for each result returned.
+        else {
+            return array_map(function ($object) {
+                return $this->instantiateEntity($object);
+            }, $response->data);
+        }
+
+    }
+
+    /**
+     * Instantiate a new entityClass
+     *
+     * @param $params
+     */
+    public function instantiateEntity($params)
     {
 
-        // Get all objects that match filter
-        $object = $this->client->get($this->endpoint, $params);
+        // Modify params so the class builder knows what was included via with()
+        $params->_with = $this->with;
 
-        // Parse json response
-        $objects = json_decode($object);
+        $params->_fields = $this->fields;
 
-        // Convert to entityClass
-        return array_map(function ($object) {
-            return new $this->class($object);
-        }, $objects->data);
+        // Instantiate new entity class
+        return new $this->class($params);
 
+    }
+
+    /**
+     * By default Rancher's scope is the default
+     * Project the credentials have access too.
+     *
+     * Use this method to set the scope.
+     */
+    public function scope($projectId)
+    {
+        $this->scope = "projects/" . $projectId . "/";
+        return $this;
     }
 
 
 
     /**
-     * Send create request to API
+     * Run available accessor's before retrieving value.
      *
-     * @param $id
-     * @param $entity
+     * @param  string  $key
+     * @return mixed
      */
-//    public function update($id, $entity)
-//    {
-//    }
+    public function __get($key)
+    {
+        if(method_exists($this, 'get'.$key.'Value')) {
+            return $this->{'get'.$key.'Value'}($this->$key);
+        }
+
+        return $this->$key;
+    }
 
     /**
-     * Send create request to API
+     * Public accessor to prefix scope to the endpoint value.
      *
-     * @param $id
+     * @param $value
+     * @return string
      */
-//    public function delete($id)
-//    {
-//    }
+    public function getEndpointValue($value)
+    {
+        return $this->scope . $value;
+    }
 
+    /**
+     * Internal getter method to ensure the
+     * endpoint we receive is correct
+     *
+     * @return string
+     */
+    private function getEndpoint()
+    {
+        return $this->__get("endpoint");
+    }
 
 }

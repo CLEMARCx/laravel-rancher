@@ -73,4 +73,11 @@ class Service extends AbstractEntity
      */
     public $fqdn;
 
+    /**
+     * Public endpoints of the service
+     *
+     * @var string
+     */
+    public $publicEndpoints;
+
 }

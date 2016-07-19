@@ -6,9 +6,14 @@ use Benmag\Rancher\Factories\Api\Certificate;
 use Benmag\Rancher\Factories\Api\Container;
 use Benmag\Rancher\Factories\Api\Environment;
 use Benmag\Rancher\Factories\Api\Host;
+use Benmag\Rancher\Factories\Api\Machine;
 use Benmag\Rancher\Factories\Api\Project;
+use Benmag\Rancher\Factories\Api\RegistryCredential;
 use Benmag\Rancher\Factories\Api\Service;
 use Benmag\Rancher\Factories\Api\LoadBalancerService;
+use Benmag\Rancher\Factories\Api\Registry;
+use Benmag\Rancher\Factories\Api\RegistrationToken;
+use Benmag\Rancher\Factories\Api\ServiceConsumeMap;
 
 /**
  * Rancher API wrapper for Laravel
@@ -18,11 +23,24 @@ use Benmag\Rancher\Factories\Api\LoadBalancerService;
  */
 class Rancher {
 
-    protected $client;
+    public $client;
 
     public function __construct(Factories\Client $client)
     {
         $this->client = $client;
+    }
+
+    public function setClient($client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * @return Factories\Api\Host
+     */
+    public function machine()
+    {
+        return new Machine($this->client);
     }
 
     /**
@@ -81,5 +99,36 @@ class Rancher {
         return new LoadBalancerService($this->client);
     }
 
+    /**
+     * @return Factories\Api\Registry
+     */
+    public function registry()
+    {
+        return new Registry($this->client);
+    }
+
+    /**
+     * @return Factories\Api\RegistryCredential
+     */
+    public function registryCredential()
+    {
+        return new RegistryCredential($this->client);
+    }
+
+    /**
+     * @return Factories\Api\RegistrationToken
+     */
+    public function registrationToken()
+    {
+        return new RegistrationToken($this->client);
+    }
+
+    /**
+     * @return Factories\Api\ServiceConsumeMap
+     */
+    public function serviceConsumeMap()
+    {
+        return new ServiceConsumeMap($this->client);
+    }
 
 }

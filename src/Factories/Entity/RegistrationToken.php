@@ -2,11 +2,11 @@
 
 namespace Benmag\Rancher\Factories\Entity;
 
-class Host extends AbstractEntity
+class RegistrationToken extends AbstractEntity
 {
 
     /**
-     * The unique identifier for the host
+     * The unique identifier for the registry
      *
      * @var string
      */
@@ -23,34 +23,30 @@ class Host extends AbstractEntity
     public $description;
 
     /**
-     * The given hostname for the host.
+     * @var string
+     */
+    public $token;
+
+    /**
+     * The registration URL of the registration token
      *
      * @var string
      */
-    public $hostname;
+    public $registrationUrl;
 
     /**
-     * Information about the host
-     *
-     * @var json
+     * @var string
      */
-    public $info;
+    public $command;
 
     /**
-     * Publicly available endpoints for the host
-     *
-     * @var array
+     * @var string
      */
-    public $publicEndpoints;
+    public $image;
 
     /**
      * @var string
      */
     public $state;
-
-    /**
-     * @var string
-     */
-    public $agentState;
 
 }

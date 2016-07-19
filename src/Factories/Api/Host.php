@@ -16,7 +16,7 @@ class Host extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Host
     /**
      * The class of the entity we are working with
      *
-     * @var Container
+     * @var HostEntity
      */
     protected $class = HostEntity::class;
 

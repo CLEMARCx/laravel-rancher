@@ -37,7 +37,7 @@ class Project extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Proje
         $data = $project->toArray();
 
         // Send "create" project request
-        $project = $this->client->post("project", $data, ['auth' => null]);
+        $project = $this->client->post($this->endpoint, $data);
 
         // Parse response
         $project = json_decode($project);
@@ -54,7 +54,7 @@ class Project extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Proje
     {
 
         // Send "stop" container request
-        $project = $this->client->delete($this->endpoint."/".$id, [], ['auth' => null]);
+        $project = $this->client->delete($this->endpoint."/".$id);
 
         // Parse response
         $project = json_decode($project);
@@ -71,7 +71,7 @@ class Project extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Proje
     {
 
         // Send "remove" container request
-        $project = $this->client->post($this->endpoint."/".$id, ['action' => 'remove'], ['auth' => null]);
+        $project = $this->client->post($this->endpoint."/".$id, ['action' => 'remove']);
 
 
         // Parse response
@@ -89,7 +89,7 @@ class Project extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Proje
     {
 
         // Send "stop" container request
-        $project = $this->client->post($this->endpoint."/".$id, ['action' => 'activate'], ['auth' => null]);
+        $project = $this->client->post($this->endpoint."/".$id, ['action' => 'activate']);
 
         // Parse response
         $project = json_decode($project);
@@ -106,7 +106,7 @@ class Project extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Proje
     {
 
         // Send "stop" container request
-        $project = $this->client->post($this->endpoint."/".$id, ['action' => 'deactivate'], ['auth' => null]);
+        $project = $this->client->post($this->endpoint."/".$id, ['action' => 'deactivate']);
 
         // Parse response
         $project = json_decode($project);

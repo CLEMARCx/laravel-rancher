@@ -10,88 +10,88 @@ class Container extends AbstractEntity
      *
      * @var string
      */
-    protected $id;
+    public $id;
 
     /**
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * Containers primary IP address
      *
      * @var string
      */
-    protected $primaryIpAddress;
+    public $primaryIpAddress;
 
     /**
      * Image container is using
      *
      * @var string
      */
-    protected $imageUuid;
+    public $imageUuid;
 
     /**
      * Overwrite the default commands set by the image
      *
      * @var array[string]
      */
-    protected $command;
+    public $command;
 
     /**
      * Environment variables for container
      *
      * @var map[string]
      */
-    protected $environment;
+    public $environment;
 
     /**
      * Ports exposed
      *
      * @var array[string]
      */
-    protected $ports;
+    public $ports;
 
     /**
      * Data volumes for container
      *
      * @var array[string]
      */
-    protected $dataVolumes;
+    public $dataVolumes;
 
     /**
      * Account container belongs to
      *
      * @var string
      */
-    protected $accountId;
+    public $accountId;
 
     /**
      * Current state of container
      *
      * @var string
      */
-    protected $state;
+    public $state;
 
     /**
      * Whether or not the services in the stack should be started after creation
      *
      * @var bool
      */
-    protected $startOnCreate = true;
+    public $startOnCreate = true;
 
     /**
      * Keep STDIN open even if not attached. `-i` in a `docker run` command
      *
      * @var bool
      */
-    protected $stdinOpen = true;
+    public $stdinOpen = true;
 
     /**
      * Allocate a pseudo-tty. `-t` in a `docker run` command
      *
      * @var bool
      */
-    protected $tty = true;
+    public $tty = true;
 
 }

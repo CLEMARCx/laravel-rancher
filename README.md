@@ -31,12 +31,11 @@ Then add the `Rancher` facade to your `aliases` key: `'Rancher' => Benmag\Ranche
 ## Configuration
 Configuration can be done via your `.env` file.
 ```
-RANCHER_BASE_URL=http://localhost:8080/v1
+RANCHER_BASE_URL=http://localhost:8080/v1/
 RANCHER_ACCESS_KEY=xxxxxxx
 RANCHER_SECRET_KEY=xxxxxxx
-```
-
->You may also publish the config file to `config/rancher.php` for editing:
+````
+>You may also publish the config file to `config/rancher.pzhp` for editing:
 `php artisan vendor:publish --provider="Benmag\Rancher\RancherServiceProvider"`
  
 ### Notes
@@ -356,7 +355,26 @@ $remove = ['serviceId' => '1s23'];
 Rancher::loadBalancerService()->removeServiceLink("1s24", $remove);
 ```
 
-### Filters
+### Machine
+[todo]
+
+### Registry
+[todo]
+
+### Registry Credential 
+[todo]
+
+### Registration Token
+[todo]
+
+### Service Consume Map
+[todo]
+
+### Query Building 
+The wrapper also provides a convenient way for you to build fairly elaborate Rancher API requests.
+The following methods return the instance so you can chain more constraints onto the request as required.
+
+#### Filters
 Rancher lets you specify filters on API resources. The type of filter to apply is set via the key. Listed below is an example of all of the filter options.
 
 ```php
@@ -370,10 +388,42 @@ $params = [
     'name_prefix' => 'Hello', // name LIKE 'Hello%'
 ];
 
-Rancher::environment()->filter($params);
+Rancher::environment()->filter($params)->get();
 
 ```
 > Remember: to change the field you filter on, change the key e.g. `['state' => 'active']` or `['description_notnull' => null]`
+
+#### Include
+With Rancher, you can specify additional endpoints that should be eager loaded with the request through an `include` parameter. This functionality is exposed via the `with` method.  
+```php
+Rancher::service()->with(['instances'])->get("1s724");
+```
+
+#### Fields
+Define additional fields from the API for the entity to dynamically expose. You can use this to enable access properties that are not explicitly defined by the entity class.
+```php
+Rancher::service()->fields(['uuid'])->get("1s724");
+```
+
+#### Scope
+By default, Rancher's scope is the default Project your credentials have access too. This chained method lets you easily change the scope to another project your credentials have access to on the fly. 
+```php
+Rancher::host()->scope('1a3302')->all();
+```
+
+Of course, you may utilize the `setClient` method to change the client to something completely new but if you want to change 
+
+#### All together now
+Here is a simple example of how you can use method chaining to build elaborate Rancher API requests.
+```php
+Rancher::services()
+            ->scope('1a3302')
+            ->with(['instances'])
+            ->filter(['environmentId' => "1e512"])
+            ->fields(['uuid'])
+            ->get()
+```
+
 
 ### Handling Exceptions
 The Rancher API will return errors as required. I am still looking for a nicer way to handle these exceptions... For the time being, simply wrap your call in a try/catch block.
@@ -391,7 +441,7 @@ try {
 ```
 
 ## Rancher API Endpoint Coverage
-The Rancher API is extensive. I've attempted to cover all of the key endpoints but there are a few endpoints that are currently unimplemented.
+The Rancher API is extensive. I've attempted to cover all of the key endpoints  but there are a few endpoints that are currently unimplemented.
 - Host `[5/8]`
   - delete
   - dockersocket
@@ -430,6 +480,8 @@ The Rancher API is extensive. I've attempted to cover all of the key endpoints b
   - remove
   - rollback
   - upgrade
+- Registry `[0]`
+- RegistryCredential `[0]` 
 - Account `[0]`
 - ApiKey `[0]`
 - Certificate `[0]`
@@ -439,12 +491,9 @@ The Rancher API is extensive. I've attempted to cover all of the key endpoints b
 - Machine `[0]`
 - Mount `[0]`
 - ProjectMember `[0]`
-- Registry `[0]`
-- RegistryCredential `[0]` 
 - StoragePool `[0]`
 - Volume `[0]`
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
