@@ -10,12 +10,12 @@ class Certificate extends AbstractEntity
      *
      * @var string
      */
-    protected $id;
+    public $id;
 
     /**
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * Certificates state

@@ -3,6 +3,7 @@
 namespace Benmag\Rancher;
 
 use Benmag\Rancher\Factories\Api\Certificate;
+use Benmag\Rancher\Factories\Api\Volume;
 use Benmag\Rancher\Factories\Api\Container;
 use Benmag\Rancher\Factories\Api\Environment;
 use Benmag\Rancher\Factories\Api\Host;
@@ -92,6 +93,14 @@ class Rancher {
     }
 
     /**
+     * @return Factories\Api\Volume
+     */
+    public function volume()
+    {
+        return new Volume($this->client);
+    }       
+
+    /**
      * @return Factories\Api\LoadBalancerService
      */
     public function loadBalancerService()
@@ -130,5 +139,7 @@ class Rancher {
     {
         return new ServiceConsumeMap($this->client);
     }
+
+ 
 
 }

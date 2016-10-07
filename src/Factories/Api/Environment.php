@@ -33,7 +33,6 @@ class Environment extends AbstractApi implements \Benmag\Rancher\Contracts\Api\E
      */
     public function create(EnvironmentEntity $environment)
     {
-
         // Send "create" environment request
         $environment = $this->client->post($this->endpoint, $environment->toArray());
 
@@ -42,7 +41,6 @@ class Environment extends AbstractApi implements \Benmag\Rancher\Contracts\Api\E
 
         // Create ContainerEntity from response
         return new EnvironmentEntity($environment);
-
     }
 
     /**
