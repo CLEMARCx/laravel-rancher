@@ -69,15 +69,14 @@ class Service extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Servi
     public function delete($id)
     {
 
-        // Send "update" environment request
-        $environment = $this->client->delete($this->endpoint."/".$id);
+        // Send "delete" service request
+        $service = $this->client->delete($this->endpoint."/".$id);
 
         // Parse response
-        $environment = json_decode($environment);
+        $service = json_decode($service);
 
-        // Create ContainerEntity from response
-        return new EnvironmentEntity($environment);
-
+        // Instantiate ServiceEntity with response
+        return new ServiceEntity($service);
     }
 
 
