@@ -52,4 +52,6 @@ class LoadBalancerService extends AbstractEntity
      */
     public $loadBalancerConfig = null;
 
+    public $lbConfig;
+
 }

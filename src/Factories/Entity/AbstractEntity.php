@@ -19,6 +19,10 @@ abstract class AbstractEntity
      */
     protected $actions;
 
+    public $fieldName;
+
+    public $code;
+
     /**
      *
      * @param \stdClass|array|null $parameters

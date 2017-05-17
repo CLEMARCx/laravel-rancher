@@ -51,7 +51,7 @@ class LoadBalancerService extends AbstractApi implements \Benmag\Rancher\Contrac
     {
 
         // Send "update" environment request
-        $lb = $this->client->put($this->endpoint."/".$id, $lb->toArray(), ['content_type' => 'json']);
+        $lb = $this->client->put($this->endpoint."/".$id."?action=update", $lb->toArray());
 
         // Parse response
         $lb = json_decode($lb);

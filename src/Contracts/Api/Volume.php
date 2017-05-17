@@ -3,12 +3,12 @@
 namespace Benmag\Rancher\Contracts\Api;
 
 /**
- * Certificate
+ * Volume
  *
  * @package  Rancher
  * @author   @CLEMARCx
  */
-interface Certificate {
+interface Volume {
 
     /**
      * {@inheritdoc}
@@ -28,10 +28,10 @@ interface Certificate {
     /**
      * Send create request to API
      *
-     * @param \Benmag\Rancher\Factories\Entity\Certificate $certificate
-     * @return \Benmag\Rancher\Factories\Entity\Certificate
+     * @param \Benmag\Rancher\Factories\Entity\Volume $volume
+     * @return \Benmag\Rancher\Factories\Entity\Volume
      */
-    public function create(\Benmag\Rancher\Factories\Entity\Certificate $certificate);
+    public function create(\Benmag\Rancher\Factories\Entity\Volume $volume);
 
     /**
      * Send remove container request to API

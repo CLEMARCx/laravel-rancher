@@ -94,4 +94,7 @@ class Container extends AbstractEntity
      */
     public $tty = true;
 
+    public $token = Null;
+
+    public $url = Null;
 }

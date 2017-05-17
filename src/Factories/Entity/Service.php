@@ -80,4 +80,6 @@ class Service extends AbstractEntity
      */
     public $publicEndpoints;
 
+    public $lbConfig;
+
 }

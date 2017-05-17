@@ -66,6 +66,30 @@ class Container extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Con
 
     }
 
+    public function execute($id)
+    {
+
+        // Send "stop" container request
+        $container = $this->client->post($this->endpoint."/".$id."?action=execute", [
+            'action' => 'execute',
+            'attachStdin' => true,
+            'attachStdout' => true,
+            'tty' => true,
+            'command' => [
+                '/bin/sh',
+                '-c',
+                'TERM=xterm-256color; export TERM; [ -x /bin/bash ] && ([ -x /usr/bin/script ] && /usr/bin/script -q -c "/bin/bash" /dev/null || exec /bin/bash) || exec /bin/sh'
+            ]
+        ]);
+
+        // Parse response
+        $container = json_decode($container);
+
+        // Create ContainerEntity from response
+        return new ContainerEntity($container);
+
+    }
+
     /**
      * {@inheritdoc}
      */

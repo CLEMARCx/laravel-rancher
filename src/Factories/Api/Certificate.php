@@ -34,6 +34,14 @@ class Certificate extends AbstractApi implements \Benmag\Rancher\Contracts\Api\C
     public function create(CertificateEntity $certificate)
     {
 
+        // Send "create" service request
+        $certificate = $this->client->post($this->endpoint, $certificate->toArray(), ['content_type' => 'json']);
+
+        // Parse response
+        $certificate = json_decode($certificate);
+
+        // Create ContainerEntity from response
+        return new CertificateEntity($certificate);
 
     }
 
@@ -42,7 +50,14 @@ class Certificate extends AbstractApi implements \Benmag\Rancher\Contracts\Api\C
      */
     public function remove($id)
     {
+        // Send "delete" certificate request
+        $certificate = $this->client->delete($this->endpoint."/".$id);
 
+        // Parse response
+        $certificate = json_decode($certificate);
+
+        // Instantiate CertificateEntity with response
+        return new CertificateEntity($certificate);
     }
 
     /**

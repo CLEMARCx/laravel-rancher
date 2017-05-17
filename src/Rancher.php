@@ -3,6 +3,7 @@
 namespace Benmag\Rancher;
 
 use Benmag\Rancher\Factories\Api\Certificate;
+use Benmag\Rancher\Factories\Api\Stack;
 use Benmag\Rancher\Factories\Api\Volume;
 use Benmag\Rancher\Factories\Api\Container;
 use Benmag\Rancher\Factories\Api\Environment;
@@ -58,6 +59,14 @@ class Rancher {
     public function certificate()
     {
         return new Certificate($this->client);
+    }
+
+    /**
+     * @return Factories\Api\Stack
+     */
+    public function stack()
+    {
+        return new Stack($this->client);
     }
 
     /**

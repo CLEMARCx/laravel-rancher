@@ -62,6 +62,17 @@ class Service extends AbstractApi implements \Benmag\Rancher\Contracts\Api\Servi
 
     }
 
+    public function restart($id) {
+        // Send "update" environment request
+        $service = $this->client->post($this->endpoint."/".$id ."?action=restart", ['action' => 'restart', 'rollingRestartStrategy' => ['batchSize' => 1]]);
+
+        // Parse response
+        $service = json_decode($service);
+
+        // Create ContainerEntity from response
+        return new ServiceEntity($service);
+    }    
+
 
     /**
      * {@inheritdoc}
