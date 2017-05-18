@@ -15,7 +15,7 @@ class Volume extends AbstractEntity
     /**
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * Volume driver

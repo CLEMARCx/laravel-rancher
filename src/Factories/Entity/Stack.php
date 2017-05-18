@@ -28,4 +28,6 @@ class Stack extends AbstractEntity
 
     public $rancherCompose;
 
+    public $volumes;
+
 }
